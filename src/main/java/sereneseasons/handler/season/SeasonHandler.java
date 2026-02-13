@@ -119,6 +119,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             {
                 Minecraft.getMinecraft().renderGlobal.loadRenderers();
                 lastSeason = calendar.getSubSeason();
+                sereneseasons.handler.HumidityRegistry.updateBiomeHumidity(lastSeason);
             }
         }
     }
