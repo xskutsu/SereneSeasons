@@ -59,7 +59,8 @@ public class SeasonsConfig extends ConfigHandler
             generateSnowAndIce = config.getBoolean("Generate Snow and Ice", WEATHER_SETTINGS, true, "Generate snow and ice during the Winter season");
             changeWeatherFrequency = config.getBoolean("Change Weather Frequency", WEATHER_SETTINGS, true, "Change the frequency of rain/snow/storms based on the season");
 
-            addSyncedValue(SeasonsOption.ENABLE_SEASONAL_HUMIDITY, true, HUMIDITY_ROOT, "Whether biomes have their humidity (rainfall) changed seasonally.");
+            addSyncedValue(SeasonsOption.ENABLE_SEASONAL_HUMIDITY, true, HUMIDITY_ROOT, "Whether biomes have their humidity (rainfall) changed seasonally");
+            addSyncedValue(SeasonsOption.MODIFY_HUMIDITY_IN_ARID_BIOMES, false, HUMIDITY_ROOT, "If true biomes with 0% humidity (rainfall) will still be affected by seasonal humidity offsets");
             
             addSyncedValue(SeasonsOption.EARLY_SPRING_HUMIDITY_OFFSET, 0.15F, CAT_SPRING, "", -1.0F, 1.0F);
             addSyncedValue(SeasonsOption.MID_SPRING_HUMIDITY_OFFSET, 0.25F, CAT_SPRING, "", -1.0F, 1.0F);

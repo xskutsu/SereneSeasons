@@ -5,6 +5,8 @@ import java.util.Map;
 
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.biome.BiomeGenBase;
+import sereneseasons.api.config.SeasonsOption;
+import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.config.SeasonsConfig;
 
@@ -45,6 +47,8 @@ public class HumidityRegistry
         }
 
         float offset = SeasonsConfig.getHumidityOffset(subSeason);
+        boolean humidityInArid = SyncedConfig.getBooleanValue(SeasonsOption.MODIFY_HUMIDITY_IN_ARID_BIOMES);
+        
         BiomeGenBase[] biomeArray = BiomeGenBase.getBiomeGenArray();
 
         for (BiomeGenBase biome : biomeArray)
@@ -55,7 +59,7 @@ public class HumidityRegistry
 
                 float original = baselineRainfall.get(biome.biomeID);
                 
-                if (original <= 0.0F && offset > 0)
+                if (!humidityInArid && original <= 0.0F && offset > 0)
                 {
                     biome.rainfall = 0.0F;
                 }

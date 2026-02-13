@@ -15,6 +15,7 @@ public enum SeasonsOption implements ISyncedOption
     PROGRESS_SEASON_WHILE_OFFLINE("Progress Season While Offline"),
 
     ENABLE_SEASONAL_HUMIDITY("Enable Seasonal Humidity"),
+    MODIFY_HUMIDITY_IN_ARID_BIOMES("Modify Humidity in Arid Biomes"),
 
     EARLY_SPRING_HUMIDITY_OFFSET("Spring Early"),
     MID_SPRING_HUMIDITY_OFFSET("Spring Mid"),
