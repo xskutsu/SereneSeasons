@@ -50,7 +50,11 @@ public class MessageSyncConfigs implements IMessage, IMessageHandler<MessageSync
                 String key = (String)keyObj;
                 SyncedConfig.SyncedConfigEntry entry = SyncedConfig.optionsToSync.get(key);
                 
-                if (entry == null) SereneSeasons.logger.error("Option " + key + " does not exist locally!");
+                if (entry == null)
+                {
+                    SereneSeasons.logger.error("Option " + key + " does not exist locally!");
+                    continue;
+                }
                 
                 entry.value = message.nbtOptions.getString(key);
                 SereneSeasons.logger.info("SS configuration synchronized with the server");
