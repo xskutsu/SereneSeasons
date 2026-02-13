@@ -12,7 +12,25 @@ public enum SeasonsOption implements ISyncedOption
     DAY_DURATION("Day Duration"),
     SUB_SEASON_DURATION("Sub Season Duration"),
     STARTING_SUB_SEASON("Starting Sub Season"),
-    PROGRESS_SEASON_WHILE_OFFLINE("Progress Season While Offline");
+    PROGRESS_SEASON_WHILE_OFFLINE("Progress Season While Offline"),
+
+    ENABLE_SEASONAL_HUMIDITY("Enable Seasonal Humidity"),
+
+    EARLY_SPRING_HUMIDITY_OFFSET("Early"),
+    MID_SPRING_HUMIDITY_OFFSET("Mid"),
+    LATE_SPRING_HUMIDITY_OFFSET("Late"),
+
+    EARLY_SUMMER_HUMIDITY_OFFSET("Early"),
+    MID_SUMMER_HUMIDITY_OFFSET("Mid"),
+    LATE_SUMMER_HUMIDITY_OFFSET("Late"),
+
+    EARLY_AUTUMN_HUMIDITY_OFFSET("Early"),
+    MID_AUTUMN_HUMIDITY_OFFSET("Mid"),
+    LATE_AUTUMN_HUMIDITY_OFFSET("Late"),
+
+    EARLY_WINTER_HUMIDITY_OFFSET("Early"),
+    MID_WINTER_HUMIDITY_OFFSET("Mid"),
+    LATE_WINTER_HUMIDITY_OFFSET("Late");
     
     private final String optionName;
 

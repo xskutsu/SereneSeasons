@@ -22,6 +22,11 @@ public class SeasonsConfig extends ConfigHandler
     public static final String CROP_FERTILITY_GENERAL = "Crop Fertility General Settings";
     public static final String CROP_FERTILITY_SEASONAL = "Crop Fertility Seasonal Settings";
     public static final String TWEAKS = "SereneTweaks Settings";
+    public static final String HUMIDITY_ROOT = "Humidity Settings";
+    public static final String CAT_SPRING = HUMIDITY_ROOT + ".offsets.spring";
+    public static final String CAT_SUMMER = HUMIDITY_ROOT + ".offsets.summer";
+    public static final String CAT_AUTUMN = HUMIDITY_ROOT + ".offsets.autumn";
+    public static final String CAT_WINTER = HUMIDITY_ROOT + ".offsets.winter";
 
     public boolean generateSnowAndIce;
     public boolean changeWeatherFrequency;
@@ -51,6 +56,24 @@ public class SeasonsConfig extends ConfigHandler
 
             generateSnowAndIce = config.getBoolean("Generate Snow and Ice", WEATHER_SETTINGS, true, "Generate snow and ice during the Winter season");
             changeWeatherFrequency = config.getBoolean("Change Weather Frequency", WEATHER_SETTINGS, true, "Change the frequency of rain/snow/storms based on the season");
+
+            addSyncedValue(SeasonsOption.ENABLE_SEASONAL_HUMIDITY, true, HUMIDITY_ROOT, "Whether biomes have their humidity (rainfall) changed seasonally.");
+            
+            addSyncedValue(SeasonsOption.EARLY_SPRING_HUMIDITY_OFFSET, 0.15F, CAT_SPRING, "", -1.0F, 1.0F);
+            addSyncedValue(SeasonsOption.MID_SPRING_HUMIDITY_OFFSET, 0.25F, CAT_SPRING, "", -1.0F, 1.0F);
+            addSyncedValue(SeasonsOption.LATE_SPRING_HUMIDITY_OFFSET, 0.15F, CAT_SPRING, "", -1.0F, 1.0F);
+
+            addSyncedValue(SeasonsOption.EARLY_SUMMER_HUMIDITY_OFFSET, -0.10F, CAT_SUMMER, "", -1.0F, 1.0F);
+            addSyncedValue(SeasonsOption.MID_SUMMER_HUMIDITY_OFFSET, -0.30F, CAT_SUMMER, "", -1.0F, 1.0F);
+            addSyncedValue(SeasonsOption.LATE_SUMMER_HUMIDITY_OFFSET, -0.20F, CAT_SUMMER, "", -1.0F, 1.0F);
+
+            addSyncedValue(SeasonsOption.EARLY_AUTUMN_HUMIDITY_OFFSET, 0.05F, CAT_AUTUMN, "", -1.0F, 1.0F);
+            addSyncedValue(SeasonsOption.MID_AUTUMN_HUMIDITY_OFFSET, 0.0F, CAT_AUTUMN, "", -1.0F, 1.0F);
+            addSyncedValue(SeasonsOption.LATE_AUTUMN_HUMIDITY_OFFSET, 0.0F, CAT_AUTUMN, "", -1.0F, 1.0F);
+
+            addSyncedValue(SeasonsOption.EARLY_WINTER_HUMIDITY_OFFSET, -0.10F, CAT_WINTER, "", -1.0F, 1.0F);
+            addSyncedValue(SeasonsOption.MID_WINTER_HUMIDITY_OFFSET, -0.20F, CAT_WINTER, "", -1.0F, 1.0F);
+            addSyncedValue(SeasonsOption.LATE_WINTER_HUMIDITY_OFFSET, -0.10F, CAT_WINTER, "", -1.0F, 1.0F);
             
             // Client-only. The server shouldn't get to decide these.
             changeGrassColour = config.getBoolean("Change Grass Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the grass colour based on the current season");
