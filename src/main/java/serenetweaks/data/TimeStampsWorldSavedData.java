@@ -45,6 +45,7 @@ public class TimeStampsWorldSavedData extends WorldSavedData{
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
+		@SuppressWarnings("unchecked")
 		Set<String> keys = nbt.func_150296_c();
 		for (String key : keys) {
 			int value = nbt.getInteger(key);
