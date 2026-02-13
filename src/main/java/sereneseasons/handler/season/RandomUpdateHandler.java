@@ -8,7 +8,6 @@
 package sereneseasons.handler.season;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -90,10 +89,13 @@ public class RandomUpdateHandler
                 if (ModConfig.seasons.generateSnowAndIce && SeasonsConfig.isDimensionWhitelisted(event.world.provider.dimensionId))
                 {
                     WorldServer world = (WorldServer) event.world;
-                    List chunks = new ArrayList(world.theChunkProviderServer.loadedChunks);
-                    for (Iterator<Chunk> iterator = chunks.iterator(); iterator.hasNext();)
+                    List<Chunk> chunks = new ArrayList<Chunk>();
+                    for (Object obj : world.theChunkProviderServer.loadedChunks)
                     {
-                        Chunk chunk = iterator.next();
+                        chunks.add((Chunk) obj);
+                    }
+                    for (Chunk chunk : chunks)
+                    {
                         int x = chunk.xPosition << 4;
                         int z = chunk.zPosition << 4;
 
