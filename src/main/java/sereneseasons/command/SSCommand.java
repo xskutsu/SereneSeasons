@@ -25,7 +25,7 @@ public class SSCommand extends CommandBase
     }
 
     @Override
-    public List getCommandAliases()
+    public List<String> getCommandAliases()
     {
         return Lists.newArrayList("ss");
     }
@@ -96,7 +96,8 @@ public class SSCommand extends CommandBase
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender sender, String[] args)
+    @SuppressWarnings("unchecked")
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args)
     {
         if (args.length == 1)
         {
