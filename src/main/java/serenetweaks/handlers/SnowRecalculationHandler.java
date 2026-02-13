@@ -24,14 +24,14 @@ public class SnowRecalculationHandler {
 
 	@SubscribeEvent
 	public void onTick(TickEvent.WorldTickEvent event) {
-		Type type = event.type;
-		Side side = event.side;
 		Phase phase = event.phase;
-		World world = event.world;
-		if (world.provider.dimensionId != 0) {
+		if (phase != Phase.END || event.phase != Phase.END || event.side != Side.SERVER || event.type != Type.WORLD)
+		{
 			return;
 		}
-		if (!(type == Type.WORLD && side == Side.SERVER)) {
+
+		World world = event.world;
+		if (world.provider.dimensionId != 0) {
 			return;
 		}
 		if (world.isRemote) {
