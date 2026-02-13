@@ -47,4 +47,16 @@ public class SyncedConfig
             this.value = defaultValue;
         }
     }
+
+    public static float getFloat(ISyncedOption option)
+    {
+        try
+        {
+            return Float.valueOf(getValue(option));
+        }
+        catch (NumberFormatException e)
+        {
+            return 0.0F;
+        }
+    }
 }

@@ -15,6 +15,9 @@ import sereneseasons.api.season.Season;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.biome.BiomeGenBase;
+import sereneseasons.handler.HumidityRegistry;
 
 public class SSCommand extends CommandBase
 {
@@ -65,6 +68,18 @@ public class SSCommand extends CommandBase
             }
             setSeason(sender, args);
         }
+        else if ("gethumidity".equals(args[0]))
+        {
+            EntityPlayerMP player = getCommandSenderAsPlayer(sender);
+            BiomeGenBase biome = player.worldObj.getBiomeGenForCoords(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posZ));
+
+            float current = biome.rainfall;
+            float original = HumidityRegistry.getBaseline(biome.biomeID);
+
+            sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.gethumidity.biome", biome.biomeName, biome.biomeID));
+            sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.gethumidity.original", (original == -1 ? "Unknown" : String.format("%.2f", original))));
+            sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.gethumidity.current", String.format("%.2f", current)));
+        }
     }
 
     private void setSeason(ICommandSender sender, String[] args) throws CommandException
@@ -86,6 +101,7 @@ public class SSCommand extends CommandBase
             SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(player.worldObj);
             seasonData.seasonCycleTicks = SeasonTime.ZERO.getSubSeasonDuration() * newSeason.ordinal();
             seasonData.markDirty();
+            sereneseasons.handler.HumidityRegistry.updateBiomeHumidity(newSeason);
             SeasonHandler.sendSeasonUpdate(player.worldObj);
             sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.setseason.success", args[1]));
         }
@@ -101,7 +117,9 @@ public class SSCommand extends CommandBase
     {
         if (args.length == 1)
         {
-            return getListOfStringsMatchingLastWord(args, "setseason");
+            List<String> list = getListOfStringsMatchingLastWord(args, "setseason");
+            list.add("gethumidity");
+            return list;
         }
 
         if (args.length == 2)

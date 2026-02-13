@@ -10,6 +10,8 @@ package sereneseasons.config;
 import java.io.File;
 
 import sereneseasons.api.config.SeasonsOption;
+import sereneseasons.api.config.SyncedConfig;
+import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.init.ModConfig;
 
@@ -121,5 +123,34 @@ public class SeasonsConfig extends ConfigHandler
 		}
     	
     	return false;
+    }
+
+    public static float getHumidityOffset(SubSeason subSeason)
+    {
+        if (!SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONAL_HUMIDITY))
+        {
+            return 0.0F;
+        }
+
+        switch (subSeason)
+        {
+            case EARLY_SPRING: return SyncedConfig.getFloat(SeasonsOption.EARLY_SPRING_HUMIDITY_OFFSET);
+            case MID_SPRING:   return SyncedConfig.getFloat(SeasonsOption.MID_SPRING_HUMIDITY_OFFSET);
+            case LATE_SPRING:  return SyncedConfig.getFloat(SeasonsOption.LATE_SPRING_HUMIDITY_OFFSET);
+            
+            case EARLY_SUMMER: return SyncedConfig.getFloat(SeasonsOption.EARLY_SUMMER_HUMIDITY_OFFSET);
+            case MID_SUMMER:   return SyncedConfig.getFloat(SeasonsOption.MID_SUMMER_HUMIDITY_OFFSET);
+            case LATE_SUMMER:  return SyncedConfig.getFloat(SeasonsOption.LATE_SUMMER_HUMIDITY_OFFSET);
+            
+            case EARLY_AUTUMN: return SyncedConfig.getFloat(SeasonsOption.EARLY_AUTUMN_HUMIDITY_OFFSET);
+            case MID_AUTUMN:   return SyncedConfig.getFloat(SeasonsOption.MID_AUTUMN_HUMIDITY_OFFSET);
+            case LATE_AUTUMN:  return SyncedConfig.getFloat(SeasonsOption.LATE_AUTUMN_HUMIDITY_OFFSET);
+            
+            case EARLY_WINTER: return SyncedConfig.getFloat(SeasonsOption.EARLY_WINTER_HUMIDITY_OFFSET);
+            case MID_WINTER:   return SyncedConfig.getFloat(SeasonsOption.MID_WINTER_HUMIDITY_OFFSET);
+            case LATE_WINTER:  return SyncedConfig.getFloat(SeasonsOption.LATE_WINTER_HUMIDITY_OFFSET);
+            
+            default: return 0.0F;
+        }
     }
 }

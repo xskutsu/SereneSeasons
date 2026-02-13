@@ -10,6 +10,7 @@ package sereneseasons.init;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraftforge.common.MinecraftForge;
 import sereneseasons.api.season.SeasonHelper;
+import sereneseasons.handler.HumidityRegistry;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.handler.season.RandomUpdateHandler;
 import sereneseasons.handler.season.SeasonHandler;
@@ -38,5 +39,6 @@ public class ModHandlers
     
     public static void postInit()
     {
+        HumidityRegistry.snapshotBaseline();
     }
 }

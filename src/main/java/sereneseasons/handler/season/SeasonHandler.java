@@ -27,6 +27,7 @@ import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.handler.HumidityRegistry;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.network.message.MessageSyncSeasonCycle;
 import sereneseasons.season.SeasonASMHelper;
@@ -35,6 +36,8 @@ import sereneseasons.season.SeasonTime;
 
 public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 {
+    private Season.SubSeason lastServerSubSeason = null; 
+    
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
@@ -54,6 +57,17 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             if (savedData.seasonCycleTicks++ > SeasonTime.ZERO.getCycleDuration())
             {
                 savedData.seasonCycleTicks = 0;
+            }
+
+            SeasonTime calendar = new SeasonTime(savedData.seasonCycleTicks);
+            Season.SubSeason currentSubSeason = calendar.getSubSeason();
+
+            if (currentSubSeason != lastServerSubSeason)
+            {
+                HumidityRegistry.updateBiomeHumidity(currentSubSeason);
+                lastServerSubSeason = currentSubSeason;
+
+                sendSeasonUpdate(world);
             }
             
             if (savedData.seasonCycleTicks % 20 == 0)

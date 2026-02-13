@@ -1,7 +1,12 @@
 commands.sereneseasons.usage=/sereneseasons <setseason> [args]
+
 commands.sereneseasons.setseason.success=Set season to %s
 commands.sereneseasons.setseason.fail=Invalid season %s
 commands.sereneseasons.setseason.disabled=Seasons are currently disabled!
+
+commands.sereneseasons.gethumidity.biome=Biome: %s | ID: %s
+commands.sereneseasons.gethumidity.original=Original Humidity: %s
+commands.sereneseasons.gethumidity.current=Current Humidity: %s
 
 itemGroup.tabSereneSeasons=Serene Seasons
 
@@ -13,7 +18,6 @@ tile.season_sensor_winter.name=Season Sensor (Winter)
 item.ss_icon.name=SS Icon
 
 item.season_clock.name=Season Clock
-
 
 desc.sereneseasons.fertile_seasons=Fertile Seasons:
 
