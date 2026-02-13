@@ -20,6 +20,7 @@ public class JsonUtil
 {
     public static final Gson SERIALIZER = new GsonBuilder().setPrettyPrinting().create();
 
+    @SuppressWarnings("unchecked")
     public static <T> T getOrCreateConfigFile(File configDir, String configName, T defaults, Type type)
     {
         File configFile = new File(configDir, configName);
