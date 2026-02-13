@@ -191,10 +191,12 @@ public class ASMHelper
         return classReader.getSuperName() != null && !classReader.getSuperName().equals("java/lang/Object");
     }
 
+    @SuppressWarnings("null")
     private static Collection<String> findAllInterfaces(ClassReader classReader)
     {
         // TODO: Find interfaces inside interfaces
-        Set<String> interfaces = Sets.newHashSet(classReader.getInterfaces());
+        String[] interfaceNames = classReader.getInterfaces();
+        Set<String> interfaces = interfaceNames == null ? Sets.<String>newHashSet() : Sets.newHashSet(interfaceNames);
 
         try
         {
