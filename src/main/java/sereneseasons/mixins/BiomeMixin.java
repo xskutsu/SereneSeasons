@@ -19,6 +19,7 @@ import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.SeasonASMHelper;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.util.SeasonColourUtil;
+import sereneseasons.handler.HumidityRegistry; 
 
 @Mixin(BiomeGenBase.class)
 public abstract class BiomeMixin implements IBiomeMixin
@@ -34,6 +35,9 @@ public abstract class BiomeMixin implements IBiomeMixin
 
     @Shadow
     public float temperature;
+
+    @Shadow
+    public int biomeID;
 
     @Shadow
     @SideOnly(Side.CLIENT)
@@ -125,7 +129,15 @@ public abstract class BiomeMixin implements IBiomeMixin
     public int getBiomeGrassColor(int p_150558_1_, int p_150558_2_, int p_150558_3_)
     {
         double d0 = (double) MathHelper.clamp_float(this.getFloatTemperature(p_150558_1_, p_150558_2_, p_150558_3_), 0.0F, 1.0F);
-        double d1 = (double) MathHelper.clamp_float(this.getFloatRainfall(), 0.0F, 1.0F);
+        
+        float originalRainfall = HumidityRegistry.getBaseline(this.biomeID);
+        if (originalRainfall == -1.0F) 
+        {
+             originalRainfall = this.getFloatRainfall();
+        }
+
+        double d1 = (double) MathHelper.clamp_float(originalRainfall, 0.0F, 1.0F);
+
         int old = getModdedBiomeGrassColor(ColorizerGrass.getGrassColor(d0, d1));
 
         BiomeGenBase biome = (BiomeGenBase)(Object)this;
