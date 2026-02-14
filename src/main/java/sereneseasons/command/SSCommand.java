@@ -15,6 +15,7 @@ import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import sereneseasons.handler.HumidityRegistry;
 
@@ -92,8 +93,13 @@ public class SSCommand extends CommandBase
 
     private void setSeason(ICommandSender sender, String[] args) throws CommandException
     {
-        EntityPlayerMP player = getCommandSenderAsPlayer(sender);
+        World world = sender.getEntityWorld();
         Season.SubSeason newSeason = null;
+
+        if (world == null)
+        {
+            throw new CommandException("commands.generic.exception");
+        }
 
         for (Season.SubSeason season : Season.SubSeason.VALUES)
         {
@@ -104,19 +110,21 @@ public class SSCommand extends CommandBase
             }
         }
 
-        if (newSeason != null)
-        {
-            SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(player.worldObj);
-            seasonData.seasonCycleTicks = SeasonTime.ZERO.getSubSeasonDuration() * newSeason.ordinal();
-            seasonData.markDirty();
-            sereneseasons.handler.HumidityRegistry.updateBiomeHumidity(newSeason);
-            SeasonHandler.sendSeasonUpdate(player.worldObj);
-            sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.setseason.success", args[1]));
-        }
-        else
+        if (newSeason == null)
         {
             sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.setseason.fail", args[1]));
+            return;
         }
+
+        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
+        
+        seasonData.seasonCycleTicks = SeasonTime.ZERO.getSubSeasonDuration() * newSeason.ordinal();
+        seasonData.markDirty();
+        
+        sereneseasons.handler.HumidityRegistry.updateBiomeHumidity(newSeason);
+        SeasonHandler.sendSeasonUpdate(world);
+
+        sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.setseason.success", args[1]));
     }
 
     @Override
