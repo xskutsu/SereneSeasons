@@ -12,7 +12,7 @@ import org.objectweb.asm.tree.MethodNode;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
-public class WeatherTransformer implements IClassTransformer
+public class BiomeTransformer implements IClassTransformer
 {
 
     @Override
@@ -25,8 +25,7 @@ public class WeatherTransformer implements IClassTransformer
 
         ClassReader classReader = new ClassReader(bytes);
 
-        boolean transform = isBiome(classReader);
-        if (!transform)
+        if (!isBiome(classReader))
         {
             return bytes;
         }
