@@ -59,7 +59,7 @@ public class HumidityRegistry
 
                 float original = baselineRainfall.get(biome.biomeID);
                 
-                if (!humidityInArid && original <= 0.0F && offset > 0)
+                if (!humidityInArid && original <= 0.0F) 
                 {
                     biome.rainfall = 0.0F;
                 }
