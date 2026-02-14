@@ -38,6 +38,9 @@ public class SeasonsConfig extends ConfigHandler
     
     public  boolean shouldRecalculateSnow;
     public int timeToRecalculateSnow;
+
+    public int meltRolls;
+    public float meltChance;
     
     public String[] whitelistedDimensions;
 
@@ -58,6 +61,9 @@ public class SeasonsConfig extends ConfigHandler
 
             generateSnowAndIce = config.getBoolean("Generate Snow and Ice", WEATHER_SETTINGS, true, "Generate snow and ice during the Winter season");
             changeWeatherFrequency = config.getBoolean("Change Weather Frequency", WEATHER_SETTINGS, true, "Change the frequency of rain/snow/storms based on the season");
+
+            meltRolls = config.getInt("Melt Rolls", WEATHER_SETTINGS, 1, 0, 100, "The number of random blocks in each chunk to check for melting every tick. Higher values melt the snow faster but will cause more lag.");
+            meltChance = config.getFloat("Melt Chance", WEATHER_SETTINGS, 0.12F, 0.0F, 1.0F, "The percentage chance that a roll will result in a melting attempt.");
 
             addSyncedValue(SeasonsOption.ENABLE_SEASONAL_HUMIDITY, true, HUMIDITY_ROOT, "Whether biomes have their humidity (rainfall) changed seasonally");
             addSyncedValue(SeasonsOption.MODIFY_HUMIDITY_IN_ARID_BIOMES, false, HUMIDITY_ROOT, "If true biomes with 0% humidity (rainfall) will still be affected by seasonal humidity offsets");
@@ -86,7 +92,7 @@ public class SeasonsConfig extends ConfigHandler
 
     	    shouldRecalculateSnow = config.getBoolean("shouldRecalculateSnow", TWEAKS, true, "This setting determines if the server will recalculate snow based on the season as you explore your world.\nThis makes your world much prettier!");
     		timeToRecalculateSnow = config.getInt("timeToRecalculateSnow", TWEAKS, 20, 0, 999999, "This setting determines how long a chunk must be unloaded in order to have its snow and ice recalculated.\nEnter a value in minutes.");
-    		
+
             loadFertilityConfig();
         }
         catch (Exception e)

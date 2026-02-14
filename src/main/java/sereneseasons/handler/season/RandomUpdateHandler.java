@@ -43,6 +43,7 @@ public class RandomUpdateHandler
     }
 
     // Randomly melt ice and snow when it isn't winter
+    @SuppressWarnings("unchecked")
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
@@ -88,77 +89,53 @@ public class RandomUpdateHandler
 
                 if (ModConfig.seasons.generateSnowAndIce && SeasonsConfig.isDimensionWhitelisted(event.world.provider.dimensionId))
                 {
+                    if (ModConfig.seasons.meltRolls <= 0) return;
+
                     WorldServer world = (WorldServer) event.world;
-                    List<Chunk> chunks = new ArrayList<Chunk>();
-                    for (Object obj : world.theChunkProviderServer.loadedChunks)
-                    {
-                        chunks.add((Chunk) obj);
-                    }
+                    List<Chunk> chunks = new ArrayList<Chunk>(world.theChunkProviderServer.loadedChunks);
+
                     for (Chunk chunk : chunks)
                     {
-                        int x = chunk.xPosition << 4;
-                        int z = chunk.zPosition << 4;
-
-                        int rand;
-                        switch (subSeason)
+                        for (int i = 0; i < ModConfig.seasons.meltRolls; i++)
                         {
-                        case EARLY_SPRING:
-                            rand = 16;
-                            break;
-                        case MID_SPRING:
-                            rand = 12;
-                            break;
-                        case LATE_SPRING:
-                            rand = 8;
-                            break;
-                        default:
-                            rand = 4;
-                            break;
-                        }
-
-                        if (world.rand.nextInt(rand) == 0)
-                        {
-                            world.updateLCG = world.updateLCG * 3 + 1013904223;
-                            int randOffset = world.updateLCG >> 2;
-                            x += randOffset & 15;
-                            z += randOffset >> 8 & 15;
-                            int yMax = world.getPrecipitationHeight(x, z);
-                            BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-
-                            if (!BiomeConfig.enablesSeasonalEffects(biome))
-                                continue;
-
-                            boolean first = true;
-                            for (int y = yMax; y >= 0; y--)
+                            if (world.rand.nextFloat() < ModConfig.seasons.meltChance)
                             {
-                                Block block = chunk.getBlock(x & 0xF, y, z & 0xF);
-
-                                if (block == Blocks.snow_layer)
-                                {
-                                    if (SeasonASMHelper.getFloatTemperature(world, biome, x, y, z) >= 0.15F)
-                                    {
-                                        world.setBlockToAir(x, y, z);
-                                        break;
-                                    }
-                                }
-
-                                if (!first)
-                                {
-                                    if (block == Blocks.ice)
-                                    {
-                                        if (SeasonASMHelper.getFloatTemperature(world, biome, x, y, z) >= 0.15F)
-                                        {
-                                            turnIntoWater(world, x, y, z);
-                                            break;
-                                        }
-                                    }
-                                }
-                                else
-                                    first = false;
+                                processMeltRoll(world, chunk);
                             }
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private void processMeltRoll(WorldServer world, Chunk chunk)
+    {
+        int x = (chunk.xPosition << 4) + world.rand.nextInt(16);
+        int z = (chunk.zPosition << 4) + world.rand.nextInt(16);
+        
+        int y = world.getPrecipitationHeight(x, z);
+        if (y <= 0) return;
+
+        BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+        if (!BiomeConfig.enablesSeasonalEffects(biome)) return;
+
+        Block topBlock = world.getBlock(x, y, z);
+        if (topBlock == Blocks.snow_layer)
+        {
+            if (SeasonASMHelper.getFloatTemperature(world, biome, x, y, z) >= 0.15F)
+            {
+                world.setBlockToAir(x, y, z);
+                return;
+            }
+        }
+
+        Block belowBlock = world.getBlock(x, y - 1, z);
+        if (belowBlock == Blocks.ice)
+        {
+            if (SeasonASMHelper.getFloatTemperature(world, biome, x, y - 1, z) >= 0.15F)
+            {
+                turnIntoWater(world, x, y - 1, z);
             }
         }
     }
