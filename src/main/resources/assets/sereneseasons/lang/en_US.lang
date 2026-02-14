@@ -1,7 +1,9 @@
-commands.sereneseasons.usage=/sereneseasons <setseason> [args]
+commands.sereneseasons.usage=/sereneseasons <setseason|gethumidity>
+
+commands.sereneseasons.available_seasons=Available seasons: %s
 
 commands.sereneseasons.setseason.success=Set season to %s
-commands.sereneseasons.setseason.fail=Invalid season %s
+commands.sereneseasons.setseason.fail=Invalid season: %s
 commands.sereneseasons.setseason.disabled=Seasons are currently disabled!
 
 commands.sereneseasons.gethumidity.biome=Biome: %s | ID: %s

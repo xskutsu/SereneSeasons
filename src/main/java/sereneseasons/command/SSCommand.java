@@ -9,7 +9,6 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import sereneseasons.api.season.Season;
 import sereneseasons.handler.season.SeasonHandler;
@@ -54,33 +53,42 @@ public class SSCommand extends CommandBase
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException
     {
-        if (args.length < 1)
+        if (args.length < 1) 
         {
             throw new WrongUsageException("commands.sereneseasons.usage");
         }
-        else if ("setseason".equals(args[0]))
+        
+        switch (args[0].toLowerCase())
         {
-            if (args.length < 2)
-            {
-                sender.addChatMessage(new ChatComponentText("Available seasons:"));
-                sender.addChatMessage(new ChatComponentText(String.join(" ", getSeasons())));
-                return;
-            }
-            setSeason(sender, args);
-        }
-        else if ("gethumidity".equals(args[0]))
-        {
-            EntityPlayerMP player = getCommandSenderAsPlayer(sender);
-            BiomeGenBase biome = player.worldObj.getBiomeGenForCoords(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posZ));
+            case "setseason":
+                if (args.length < 2)
+                {
+                    String seasons = String.join(", ", getSeasons());
+                    sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.available_seasons", seasons));
+                    break;
+                }
 
-            float current = biome.rainfall;
-            float original = HumidityRegistry.getBaseline(biome.biomeID);
+                setSeason(sender, args);
+                break;
 
-            sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.gethumidity.biome", biome.biomeName, biome.biomeID));
-            sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.gethumidity.original", (original == -1 ? "Unknown" : String.format("%.2f", original))));
-            sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.gethumidity.current", String.format("%.2f", current)));
+            case "gethumidity":
+                getHumidity(sender);
+                break;
         }
     }
+
+    private void getHumidity(ICommandSender sender)
+    {
+        EntityPlayerMP player = getCommandSenderAsPlayer(sender);
+        BiomeGenBase biome = player.worldObj.getBiomeGenForCoords(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posZ));
+
+        float original = HumidityRegistry.getBaseline(biome.biomeID);
+        float current = biome.rainfall;
+
+        sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.gethumidity.biome", biome.biomeName, biome.biomeID));
+        sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.gethumidity.original", (original == -1 ? "Unknown" : String.format("%.2f", original))));
+        sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.gethumidity.current", String.format("%.2f", current)));
+    } 
 
     private void setSeason(ICommandSender sender, String[] args) throws CommandException
     {
@@ -115,16 +123,16 @@ public class SSCommand extends CommandBase
     @SuppressWarnings("unchecked")
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args)
     {
-        if (args.length == 1)
+        switch (args.length)
         {
-            List<String> list = getListOfStringsMatchingLastWord(args, "setseason");
-            list.add("gethumidity");
-            return list;
-        }
-
-        if (args.length == 2)
-        {
-            return getListOfStringsMatchingLastWord(args, getSeasons());
+            case 1:
+                return getListOfStringsMatchingLastWord(args, "setseason", "gethumidity");
+            case 2:
+                switch (args[0])
+                {
+                    case "setseason":
+                        return getListOfStringsMatchingLastWord(args, getSeasons());
+                }
         }
 
         return null;
