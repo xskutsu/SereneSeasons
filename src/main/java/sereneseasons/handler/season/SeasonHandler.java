@@ -114,12 +114,23 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             }
             
             SeasonTime calendar = new SeasonTime(clientSeasonCycleTicks.get(dimension));
+            Season.SubSeason currentSubSeason = calendar.getSubSeason();
             
             if (calendar.getSubSeason() != lastSeason)
             {
-                Minecraft.getMinecraft().renderGlobal.loadRenderers();
-                lastSeason = calendar.getSubSeason();
-                sereneseasons.handler.HumidityRegistry.updateBiomeHumidity(lastSeason);
+                sereneseasons.handler.HumidityRegistry.updateBiomeHumidity(currentSubSeason);
+                lastSeason = currentSubSeason;
+                
+                net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getMinecraft();
+                if (mc.renderGlobal == null || mc.thePlayer == null) return;
+
+                int distance = mc.gameSettings.renderDistanceChunks * 16;
+                int x1 = (int)mc.thePlayer.posX - distance;
+                int z1 = (int)mc.thePlayer.posZ - distance;
+                int x2 = (int)mc.thePlayer.posX + distance;
+                int z2 = (int)mc.thePlayer.posZ + distance;
+
+                mc.renderGlobal.markBlockRangeForRenderUpdate(x1, 0, z1, x2, 255, z2);
             }
         }
     }
